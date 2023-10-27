@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo App</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+</head>
+
+
+<body>
+    <div style="margin-top: 50px;" class="ui container">
+        <h1 class="ui center aligned header">Taskmaster</h1>
+        <a href="{{ url_for('old') }}">go to archive</a>
+        <form class="ui form" action="/add" method="post">
+            <div class="two fields">
+                <div class="field">
+                    <label>WHAT</label>
+                    <input type="text" name="description_what" placeholder="what are you trying to accomplish"><br>
+                </div>
+                <div class="field">
+                    <label>WHY</label>
+                    <input type="text" name="description_why" placeholder="why it is important"><br>
+                </div>
+            </div>
+
+            <button class="ui blue button" type="submit">Add</button>
+        </form>
+    </div>
+    <hr>
+
+    {% macro todocard(todo) -%}
+    <div class="item">
+        <div class="ui segments">
+            <span class="ui black label">{{todo.date_created.strftime('%Y-%m-%d')}}</span>
+            {% if todo.completed == False %}
+            <span class="ui gray label">Not Complete</span>
+            {% else %}
+            <span class="ui green label">Completed</span>
+            {% endif %}
+            <div class="ui segment">
+                <span>You need to do: {{todo.description_what }}</span>
+            </div>
+            <div class="ui segment">
+                <span>Why it is important: {{ todo.description_why }}</span>
+            </div>
+
+
+            <a class="ui blue button" href="/complete/{{ todo.id }}">Complete</a>
+            <a class="ui red button" href="/archive/{{ todo.id }}">Archive</a>
+        </div>
+        {% endmacro -%}
+
+
+        <div class="ui segment">
+            {% for todo in todo_list_active %}
+            {{ todocard(todo) }}
+            {% endfor %}
+        </div>
+        <div class="ui segment">
+            {% for todo in todo_list_completed %}
+            {{ todocard(todo) }}
+            {% endfor %}
+        </div>
+
+
+
+
+
+</body>
+
+</html>
